@@ -89,7 +89,20 @@ const INITIAL_LOGS = [
 
 export default function App() {
   // Global Theme State ('dark' or 'light')
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    if (theme === 'light') {
+      document.documentElement.style.backgroundColor = '#FAF9F6';
+      document.body.style.backgroundColor = '#FAF9F6';
+    } else {
+      document.documentElement.style.backgroundColor = '#000000';
+      document.body.style.backgroundColor = '#000000';
+    }
+  }, [theme]);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
@@ -212,39 +225,47 @@ export default function App() {
   };
 
   // Dynamic styles based on Theme State
-  const bgClass = theme === 'dark' ? 'bg-[#000000] text-neutral-300' : 'bg-[#FAF9F6] text-zinc-850';
+  const bgClass = theme === 'dark' ? 'bg-[#000000] text-neutral-300' : 'bg-[#FAF9F6] text-zinc-900';
   const cardClass = theme === 'dark' ? 'bg-[#0A0A0A] border-[#1A1A1A]' : 'bg-white border-zinc-200 shadow-sm';
   const borderClass = theme === 'dark' ? 'border-[#1A1A1A]' : 'border-zinc-200';
   const textMain = theme === 'dark' ? 'text-white' : 'text-[#09090B]';
-  const textMuted = theme === 'dark' ? 'text-neutral-400' : 'text-[#71717A]';
-  const accentText = theme === 'dark' ? 'text-[#00FF66]' : 'text-[#00B34A]';
-  const accentBg = theme === 'dark' ? 'bg-[#00FF66]/5 border-[#00FF66]/20' : 'bg-[#00B34A]/5 border-[#00B34A]/20';
-  const accentColor = theme === 'dark' ? '#00FF66' : '#00B34A';
-  const treeActive = theme === 'dark' ? 'text-[#00FF66] font-semibold' : 'text-[#00B34A] font-semibold';
-  const termPrompt = theme === 'dark' ? 'text-[#00E5FF]' : 'text-[#008B9B]';
-  const termValueCyan = theme === 'dark' ? 'text-[#00E5FF]' : 'text-[#008B9B]';
-  const termValueGreen = theme === 'dark' ? 'text-[#00FF66]' : 'text-[#00B34A]';
-  const cursorBg = theme === 'dark' ? 'bg-[#00FF66]' : 'bg-[#00B34A]';
+  const textMuted = theme === 'dark' ? 'text-neutral-400' : 'text-zinc-600';
+  const accentText = theme === 'dark' ? 'text-[#00FF66]' : 'text-[#007A3E]';
+  const accentBg = theme === 'dark' ? 'bg-[#00FF66]/5 border-[#00FF66]/20' : 'bg-[#007A3E]/5 border-[#007A3E]/20';
+  const accentColor = theme === 'dark' ? '#00FF66' : '#007A3E';
+  const treeActive = theme === 'dark' ? 'text-[#00FF66] font-semibold' : 'text-[#007A3E] font-semibold';
+  const termPrompt = theme === 'dark' ? 'text-[#00E5FF]' : 'text-[#006D7A]';
+  const termValueCyan = theme === 'dark' ? 'text-[#00E5FF]' : 'text-[#006D7A]';
+  const termValueGreen = theme === 'dark' ? 'text-[#00FF66]' : 'text-[#007A3E]';
+  const cursorBg = theme === 'dark' ? 'bg-[#00FF66]' : 'bg-[#007A3E]';
   const gridClass = theme === 'dark' ? 'bg-grid-pattern' : 'bg-grid-pattern-light';
+
+  // Modal Theme Classes
+  const modalBg = theme === 'dark' ? 'bg-[#070708] border-[#121214] text-neutral-300' : 'bg-white border-zinc-200 text-zinc-750';
+  const modalHeaderBg = theme === 'dark' ? 'bg-[#0b0b0d] border-[#121214]' : 'bg-zinc-50 border-zinc-200';
+  const modalTitle = theme === 'dark' ? 'text-white' : 'text-zinc-900';
+  const modalCloseBtn = theme === 'dark'
+    ? 'bg-black/40 border-[#121214] hover:border-red-500/50 hover:bg-red-950/20 text-neutral-400 hover:text-red-400'
+    : 'bg-zinc-100 border-zinc-200 hover:border-red-500/30 hover:bg-red-50 text-zinc-500 hover:text-red-600';
 
   // Primary CTA Button Style (Solid Green Accent)
   const primaryBtnClass = theme === 'dark'
     ? 'bg-[#00FF66] text-black hover:bg-[#00FF66]/85 border border-transparent shadow-[0_0_12px_rgba(0,255,102,0.15)] font-bold'
-    : 'bg-[#00B34A] text-white hover:bg-[#00B34A]/85 border border-transparent shadow-[0_0_12px_rgba(0,179,74,0.15)] font-bold';
+    : 'bg-[#007A3E] text-white hover:bg-[#007A3E]/85 border border-transparent shadow-[0_0_12px_rgba(0,122,62,0.15)] font-bold';
 
   // Secondary CTA Button Style (Outlined Zinc Bounds)
   const secondaryBtnClass = theme === 'dark'
     ? 'border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-500 bg-transparent font-medium'
-    : 'border border-zinc-200 text-zinc-650 hover:text-zinc-950 hover:border-zinc-400 bg-transparent font-medium';
+    : 'border border-zinc-200 text-zinc-600 hover:text-zinc-950 hover:border-zinc-400 bg-transparent font-medium';
 
   return (
-    <div className={`min-h-screen relative font-sans transition-colors duration-300 ${bgClass}`}>
+    <div className={`min-h-screen relative font-sans transition-colors duration-300 ${theme === 'dark' ? 'selection:bg-[#00FF66]/20 selection:text-[#00FF66]' : 'selection:bg-[#007A3E]/20 selection:text-[#007A3E]'} ${bgClass}`}>
       {/* Grid Background overlay */}
       <div className={`absolute inset-0 opacity-[0.2] pointer-events-none z-0 transition-all ${gridClass}`} />
       
       {/* Top Gradient Flare */}
       <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[1px] blur-sm pointer-events-none z-0 ${
-        theme === 'dark' ? 'bg-gradient-to-r from-transparent via-[#00FF66]/15 to-transparent' : 'bg-gradient-to-r from-transparent via-[#00B34A]/15 to-transparent'
+        theme === 'dark' ? 'bg-gradient-to-r from-transparent via-[#00FF66]/15 to-transparent' : 'bg-gradient-to-r from-transparent via-[#007A3E]/15 to-transparent'
       }`} />
       
       {/* ================= GLOBAL STICKY NAVIGATION BAR ================= */}
@@ -258,11 +279,11 @@ export default function App() {
             </span>
             {/* Anchor scroll links */}
             <div className="hidden md:flex items-center space-x-4 text-[11px] font-mono text-neutral-500">
-              <a href="#about" className="hover:text-[#00FF66] transition-colors">About</a>
-              <a href="#experience" className="hover:text-[#00FF66] transition-colors">Experience</a>
-              <a href="#competencies" className="hover:text-[#00FF66] transition-colors">Competencies</a>
-              <a href="#systems" className="hover:text-[#00FF66] transition-colors">Systems</a>
-              <a href="#credentials" className="hover:text-[#00FF66] transition-colors">Credentials</a>
+              <a href="#about" className="hover:text-[#007A3E] dark:hover:text-[#00FF66] transition-colors">About</a>
+              <a href="#experience" className="hover:text-[#007A3E] dark:hover:text-[#00FF66] transition-colors">Experience</a>
+              <a href="#competencies" className="hover:text-[#007A3E] dark:hover:text-[#00FF66] transition-colors">Competencies</a>
+              <a href="#systems" className="hover:text-[#007A3E] dark:hover:text-[#00FF66] transition-colors">Systems</a>
+              <a href="#credentials" className="hover:text-[#007A3E] dark:hover:text-[#00FF66] transition-colors">Credentials</a>
             </div>
           </div>
 
@@ -291,7 +312,7 @@ export default function App() {
         {/* ================= HERO & COMMAND CENTER BENTO GRID ================= */}
         <div id="about">
           <div className="text-[9px] font-mono text-neutral-500 uppercase tracking-widest mb-2 flex items-center gap-1.5 select-none">
-            <span className={`h-1.5 w-1.5 rounded-full ${theme === 'dark' ? 'bg-[#00FF66]' : 'bg-[#00B34A]'}`} />
+            <span className={`h-1.5 w-1.5 rounded-full ${theme === 'dark' ? 'bg-[#00FF66]' : 'bg-[#007A3E]'}`} />
             System Control Center
           </div>
           
@@ -306,7 +327,7 @@ export default function App() {
               <div>
                 <div className="mb-3 flex flex-wrap items-start">
                   <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-[10px] font-mono font-medium tracking-wide ${accentBg} ${accentText}`}>
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#00FF66] animate-pulse-fast inline-block"></span>
+                    <span className={`h-1.5 w-1.5 rounded-full animate-pulse-fast inline-block ${theme === 'dark' ? 'bg-[#00FF66]' : 'bg-[#007A3E]'}`}></span>
                     Node: Active // Relocating to UK for MSc AI @ Teesside University
                   </span>
                 </div>
@@ -388,7 +409,7 @@ export default function App() {
                   <h3 className={`text-[11px] font-mono uppercase tracking-wider ${accentText}`}>
                     // Now // Live Operations
                   </h3>
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#00FF66] animate-pulse"></span>
+                  <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${theme === 'dark' ? 'bg-[#00FF66]' : 'bg-[#007A3E]'}`}></span>
                 </div>
                 
                 <p className="text-xs leading-relaxed font-sans mb-3 space-y-2">
@@ -400,7 +421,7 @@ export default function App() {
               
               <div className={`mt-3 pt-2.5 border-t flex items-center justify-between text-[9px] font-mono text-neutral-500 ${borderClass}`}>
                 <span className="flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-[#00FF66]" /> Credentials Active
+                  <ShieldCheck className={`w-3 h-3 ${theme === 'dark' ? 'text-[#00FF66]' : 'text-[#007A3E]'}`} /> Credentials Active
                 </span>
                 <span className={`${accentText} font-bold`}>OPERATIONAL</span>
               </div>
@@ -439,7 +460,7 @@ export default function App() {
                   {terminalHistory.map((line, index) => {
                     if (line.type === 'py-header') {
                       return (
-                        <div key={index} className="text-[#71717A] text-xs select-none leading-relaxed">
+                        <div key={index} className={`text-xs select-none leading-relaxed ${theme === 'dark' ? 'text-zinc-500' : 'text-zinc-600'}`}>
                           {line.text}
                         </div>
                       );
@@ -454,7 +475,7 @@ export default function App() {
                     }
                     if (line.type === 'log-info') {
                       return (
-                        <div key={index} className="text-[#71717A] leading-relaxed font-mono">
+                        <div key={index} className={`leading-relaxed font-mono ${theme === 'dark' ? 'text-zinc-500' : 'text-zinc-600'}`}>
                           {line.text}
                         </div>
                       );
@@ -475,14 +496,14 @@ export default function App() {
                     }
                     if (line.type === 'log-amber') {
                       return (
-                        <div key={index} className={`leading-relaxed font-mono font-semibold ${theme === 'dark' ? 'text-[#FFD700]' : 'text-[#B58900]'}`}>
+                        <div key={index} className={`leading-relaxed font-mono font-semibold ${theme === 'dark' ? 'text-[#FFD700]' : 'text-[#8F6B00]'}`}>
                           {line.text}
                         </div>
                       );
                     }
                     if (line.type === 'dict-brace') {
                       return (
-                        <div key={index} className={`leading-relaxed font-mono ${theme === 'dark' ? 'text-[#FFD700]' : 'text-[#B58900]'}`}>
+                        <div key={index} className={`leading-relaxed font-mono ${theme === 'dark' ? 'text-[#FFD700]' : 'text-[#8F6B00]'}`}>
                           {line.text}
                         </div>
                       );
@@ -490,10 +511,10 @@ export default function App() {
                     if (line.type === 'dict-keyval') {
                       return (
                         <div key={index} className="leading-relaxed font-mono pl-4">
-                          <span className={theme === 'dark' ? 'text-[#FFD700]' : 'text-[#B58900]'}>"{line.key}"</span>
-                          <span className={theme === 'dark' ? 'text-[#FFD700]' : 'text-[#B58900]'}>: </span>
+                          <span className={theme === 'dark' ? 'text-[#FFD700]' : 'text-[#8F6B00]'}>"{line.key}"</span>
+                          <span className={theme === 'dark' ? 'text-[#FFD700]' : 'text-[#8F6B00]'}>: </span>
                           <span className={line.isCyan ? termValueCyan : termValueGreen}>"{line.val}"</span>
-                          {line.comma && <span className={theme === 'dark' ? 'text-[#FFD700]' : 'text-[#B58900]'}>,</span>}
+                          {line.comma && <span className={theme === 'dark' ? 'text-[#FFD700]' : 'text-[#8F6B00]'}>,</span>}
                         </div>
                       );
                     }
@@ -559,13 +580,13 @@ export default function App() {
 
                 {/* Tree Toggles */}
                 <div className={`font-mono text-xs border p-3 mb-4 leading-normal flex flex-col gap-1 rounded-lg ${
-                  theme === 'dark' ? 'bg-black/40 border-[#1A1A1A]' : 'bg-zinc-55 border-zinc-200'
+                  theme === 'dark' ? 'bg-black/40 border-[#1A1A1A]' : 'bg-zinc-50 border-zinc-200'
                 }`}>
                   <div className={`font-semibold mb-0.5 ${accentText}`}>// Infrastructure Tree (Click nodes)</div>
                   <button
                     onClick={() => setPipelineTab('tiktok')}
                     className={`w-full text-left font-mono text-xs py-0.5 cursor-pointer transition-colors duration-200 outline-none select-none ${
-                      pipelineTab === 'tiktok' ? treeActive : 'text-neutral-400 hover:text-neutral-200 dark:hover:text-white'
+                      pipelineTab === 'tiktok' ? treeActive : (theme === 'dark' ? 'text-neutral-400 hover:text-neutral-200 dark:hover:text-white' : 'text-zinc-500 hover:text-zinc-900')
                     }`}
                   >
                     ┌── TikTok Marketing API
@@ -573,7 +594,7 @@ export default function App() {
                   <button
                     onClick={() => setPipelineTab('creatify')}
                     className={`w-full text-left font-mono text-xs py-0.5 cursor-pointer transition-colors duration-200 outline-none select-none ${
-                      pipelineTab === 'creatify' ? treeActive : 'text-neutral-400 hover:text-neutral-200 dark:hover:text-white'
+                      pipelineTab === 'creatify' ? treeActive : (theme === 'dark' ? 'text-neutral-400 hover:text-neutral-200 dark:hover:text-white' : 'text-zinc-500 hover:text-zinc-900')
                     }`}
                   >
                     ├── Creatify Video Gen API
@@ -581,7 +602,7 @@ export default function App() {
                   <button
                     onClick={() => setPipelineTab('gateway')}
                     className={`w-full text-left font-mono text-xs py-0.5 cursor-pointer transition-colors duration-200 outline-none select-none ${
-                      pipelineTab === 'gateway' ? treeActive : 'text-neutral-400 hover:text-neutral-200 dark:hover:text-white'
+                      pipelineTab === 'gateway' ? treeActive : (theme === 'dark' ? 'text-neutral-400 hover:text-neutral-200 dark:hover:text-white' : 'text-zinc-500 hover:text-zinc-900')
                     }`}
                   >
                     ├── FastAPI Server Gateway
@@ -589,7 +610,7 @@ export default function App() {
                   <button
                     onClick={() => setPipelineTab('droplet')}
                     className={`w-full text-left font-mono text-xs py-0.5 cursor-pointer transition-colors duration-200 outline-none select-none ${
-                      pipelineTab === 'droplet' ? treeActive : 'text-neutral-400 hover:text-neutral-200 dark:hover:text-white'
+                      pipelineTab === 'droplet' ? treeActive : (theme === 'dark' ? 'text-neutral-400 hover:text-neutral-200 dark:hover:text-white' : 'text-zinc-500 hover:text-zinc-900')
                     }`}
                   >
                     └── DigitalOcean Deployment Cluster
@@ -731,7 +752,7 @@ export default function App() {
             
             {/* Visual Vertical Node Roadmap */}
             <div className={`lg:col-span-1 p-5 rounded-xl border flex flex-col justify-center ${cardClass}`}>
-              <div className="relative border-l border-zinc-800 dark:border-zinc-800 pl-6 ml-4 space-y-6">
+              <div className="relative border-l border-zinc-200 dark:border-zinc-800 pl-6 ml-4 space-y-6">
                 {[
                   { year: "2021", text: "Commenced Core AI Foundations" },
                   { year: "2025", text: "Graduated B.Tech AI & Data Science (7.55 / 10.0 CGPA)" },
@@ -774,9 +795,9 @@ export default function App() {
                   "Integrated secure payment infrastructures via the <strong>Stripe API</strong> with strict multi-tenant isolation protocols across production micro-frontends."
                 ].map((bullet, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <span className={`h-1.5 w-1.5 rounded-full shrink-0 mt-2 ${theme === 'dark' ? 'bg-[#00FF66]' : 'bg-[#00B34A]'}`} />
+                    <span className={`h-1.5 w-1.5 rounded-full shrink-0 mt-2 ${theme === 'dark' ? 'bg-[#00FF66]' : 'bg-[#007A3E]'}`} />
                     <span 
-                      className={`text-xs md:text-sm font-sans leading-relaxed ${theme === 'dark' ? 'text-neutral-300' : 'text-zinc-655'}`}
+                      className={`text-xs md:text-sm font-sans leading-relaxed ${theme === 'dark' ? 'text-neutral-300' : 'text-zinc-700'}`}
                       dangerouslySetInnerHTML={{ __html: bullet }}
                     />
                   </li>
@@ -806,7 +827,7 @@ export default function App() {
                     <span key={idx} className={`text-xs font-mono px-3 py-1.5 rounded-md border transition-all ${
                       theme === 'dark' 
                         ? 'bg-black/30 border-[#1A1A1A] text-neutral-300 hover:border-[#00FF66]/20' 
-                        : 'bg-zinc-105 border-zinc-200 text-zinc-700 hover:border-[#00B34A]/30'
+                        : 'bg-zinc-100 border-zinc-200 text-zinc-700 hover:border-[#007A3E]/30'
                     }`}>
                       {skill === 'LangChain' || skill === 'FAISS Vector Search' ? <strong>{skill}</strong> : skill}
                     </span>
@@ -824,7 +845,7 @@ export default function App() {
                     <span key={idx} className={`text-xs font-mono px-3 py-1.5 rounded-md border transition-all ${
                       theme === 'dark' 
                         ? 'bg-black/30 border-[#1A1A1A] text-neutral-300 hover:border-[#00FF66]/20' 
-                        : 'bg-zinc-105 border-zinc-200 text-zinc-700 hover:border-[#00B34A]/30'
+                        : 'bg-zinc-100 border-zinc-200 text-zinc-700 hover:border-[#007A3E]/30'
                     }`}>
                       {skill === 'FastAPI' ? <strong>{skill}</strong> : skill}
                     </span>
@@ -842,7 +863,7 @@ export default function App() {
                     <span key={idx} className={`text-xs font-mono px-3 py-1.5 rounded-md border transition-all ${
                       theme === 'dark' 
                         ? 'bg-black/30 border-[#1A1A1A] text-neutral-300 hover:border-[#00FF66]/20' 
-                        : 'bg-zinc-105 border-zinc-200 text-zinc-700 hover:border-[#00B34A]/30'
+                        : 'bg-zinc-100 border-zinc-200 text-zinc-700 hover:border-[#007A3E]/30'
                     }`}>
                       {skill === 'DigitalOcean' || skill === 'Stripe Integration' ? <strong>{skill}</strong> : skill}
                     </span>
@@ -879,7 +900,7 @@ export default function App() {
                 <h4 className={`text-lg font-bold font-sans ${textMain} mb-1.5`}>AdTech Optimization Suite</h4>
                 
                 {/* Restructured Case Study Lifecycles */}
-                <div className={`space-y-1.5 text-xs font-sans mt-2 mb-3 ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-750'}`}>
+                <div className={`space-y-1.5 text-xs font-sans mt-2 mb-3 ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-700'}`}>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE CHALLENGE:</span> Slicing massive, 4-hour manual marketing configurations down to programmatic cycles.</div>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE IMPLEMENTATION:</span> Programmatic middleware binding the <strong>TikTok Marketing API</strong> with automated creative rendering assets.</div>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE METRIC OUTCOME:</span> Secured a <strong>95.8% reduction</strong> in human configuration latency, scaling live client spend on <strong>DigitalOcean</strong> drops.</div>
@@ -887,7 +908,7 @@ export default function App() {
 
                 {/* System Topology flowcharts */}
                 <div className={`mt-3 p-2.5 rounded font-mono text-[9px] overflow-x-auto whitespace-nowrap border ${
-                  theme === 'dark' ? 'bg-black/50 border-[#1A1A1A] text-[#00E5FF]' : 'bg-zinc-50 border-zinc-100 text-[#008B9B]'
+                  theme === 'dark' ? 'bg-black/50 border-[#1A1A1A] text-[#00E5FF]' : 'bg-zinc-50 border-zinc-100 text-[#006D7A]'
                 }`}>
                   <div className="text-neutral-500 mb-0.5">// Data Flow System Topology Map</div>
                   Authentication ──&gt; Campaign Management ──&gt; Creative Generation ──&gt; Media Synchronization ──&gt; Marketing API ──&gt; Analytics &amp; Reporting
@@ -895,7 +916,7 @@ export default function App() {
 
                 {/* Complexity Infrastructure Table A (Removed Subjective Labels) */}
                 <div className={`mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1.5 p-3 rounded-lg border text-[10px] font-mono transition-colors ${
-                  theme === 'dark' ? 'bg-black/40 border-[#1A1A1A]' : 'bg-zinc-50 border-zinc-150'
+                  theme === 'dark' ? 'bg-black/40 border-[#1A1A1A]' : 'bg-zinc-50 border-zinc-200'
                 }`}>
                   <div className="flex justify-between border-b pb-1 border-neutral-800/20 dark:border-steel/20">
                     <span className="text-neutral-500">Engineered Complexity:</span>
@@ -958,7 +979,7 @@ export default function App() {
                 <h4 className={`text-base font-bold font-sans ${textMain} mb-1.5`}>Automated Data Co-Pilot</h4>
                 
                 {/* Restructured Case Study Lifecycles */}
-                <div className={`space-y-1.5 text-xs font-sans mt-2 mb-3 ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-755'}`}>
+                <div className={`space-y-1.5 text-xs font-sans mt-2 mb-3 ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-700'}`}>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE CHALLENGE:</span> Manually cleaning, processing, and evaluating high-dimensional CSV data.</div>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE IMPLEMENTATION:</span> Automated stream mapping dataset cleanups to scikit-learn training threads and SHAP matrices.</div>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE METRIC OUTCOME:</span> Slashed turnaround times by <strong>70% Latency Drop</strong> on <strong>500MB CSV Datasets</strong>.</div>
@@ -966,7 +987,7 @@ export default function App() {
 
                 {/* System Topology flowchart */}
                 <div className={`mt-3 p-2.5 rounded font-mono text-[9px] overflow-x-auto whitespace-nowrap border ${
-                  theme === 'dark' ? 'bg-black/50 border-[#1A1A1A] text-[#00E5FF]' : 'bg-zinc-50 border-zinc-100 text-[#008B9B]'
+                  theme === 'dark' ? 'bg-black/50 border-[#1A1A1A] text-[#00E5FF]' : 'bg-zinc-50 border-zinc-100 text-[#006D7A]'
                 }`}>
                   <div className="text-neutral-500 mb-0.5">// Data Flow System Topology Map</div>
                   Raw CSV (Up to 500MB) ──&gt; [Pandas Processing] ──&gt; [Scikit AutoML] ──&gt; [SHAP Matrix] ──&gt; Streamlit UI
@@ -974,7 +995,7 @@ export default function App() {
 
                 {/* Complexity Infrastructure Table B (Removed Subjective Labels) */}
                 <div className={`mt-4 grid grid-cols-1 gap-y-1 p-3 rounded-lg border text-[10px] font-mono transition-colors ${
-                  theme === 'dark' ? 'bg-black/40 border-[#1A1A1A]' : 'bg-zinc-50 border-zinc-150'
+                  theme === 'dark' ? 'bg-black/40 border-[#1A1A1A]' : 'bg-zinc-50 border-zinc-200'
                 }`}>
                   <div className="flex justify-between border-b pb-1 border-neutral-800/20 dark:border-steel/20">
                     <span className="text-neutral-500">Engineered Complexity:</span>
@@ -1041,7 +1062,7 @@ export default function App() {
                 <h4 className={`text-lg font-bold font-sans ${textMain} mb-1.5`}>Financial Equity RAG Assistant</h4>
                 
                 {/* Restructured Case Study Lifecycles */}
-                <div className={`space-y-1.5 text-xs font-sans mt-2 mb-3 ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-755'}`}>
+                <div className={`space-y-1.5 text-xs font-sans mt-2 mb-3 ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-700'}`}>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE CHALLENGE:</span> Searching through unstructured PDF reports to extract citation-tracked answers.</div>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE IMPLEMENTATION:</span> Cosine vector similarity indexing mapped asynchronously on FAISS index vectors via <strong>LangChain</strong>.</div>
                   <div><span className="font-bold font-mono text-[9px] text-neutral-500 tracking-wide">// THE METRIC OUTCOME:</span> Achieved sub-second document citations lookup with zero validation hallucinations.</div>
@@ -1049,7 +1070,7 @@ export default function App() {
 
                 {/* System Topology flowchart */}
                 <div className={`mt-3 p-2.5 rounded font-mono text-[9px] overflow-x-auto whitespace-nowrap border ${
-                  theme === 'dark' ? 'bg-black/50 border-[#1A1A1A] text-[#00E5FF]' : 'bg-zinc-50 border-zinc-100 text-[#008B9B]'
+                  theme === 'dark' ? 'bg-black/50 border-[#1A1A1A] text-[#00E5FF]' : 'bg-zinc-50 border-zinc-100 text-[#006D7A]'
                 }`}>
                   <div className="text-neutral-500 mb-0.5">// Data Flow System Topology Map</div>
                   PDF Corpus ──&gt; [Recursive Text Splitter] ──&gt; [OpenAI embeddings-3-small] ──&gt; [FAISS Index Storage] ──&gt; Enriched Context LLM Response
@@ -1057,7 +1078,7 @@ export default function App() {
 
                 {/* Complexity Infrastructure Table C (Removed Subjective Labels) */}
                 <div className={`mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1.5 p-3 rounded-lg border text-[10px] font-mono transition-colors ${
-                  theme === 'dark' ? 'bg-black/40 border-[#1A1A1A]' : 'bg-zinc-50 border-zinc-150'
+                  theme === 'dark' ? 'bg-black/40 border-[#1A1A1A]' : 'bg-zinc-50 border-zinc-200'
                 }`}>
                   <div className="flex justify-between border-b pb-1 border-neutral-800/20 dark:border-steel/20">
                     <span className="text-neutral-500">Engineered Complexity:</span>
@@ -1269,11 +1290,11 @@ export default function App() {
             © {new Date().getFullYear()} Mohammad Roshan Ali. All systems operational.
           </div>
           <div className="flex gap-4">
-            <span className="hover:text-[#00FF66] transition-colors cursor-pointer select-none">Security Policy</span>
+            <span className="hover:text-[#007A3E] dark:hover:text-[#00FF66] transition-colors cursor-pointer select-none">Security Policy</span>
             <span>•</span>
-            <span className="hover:text-[#00FF66] transition-colors cursor-pointer select-none">Compliance Logs</span>
+            <span className="hover:text-[#007A3E] dark:hover:text-[#00FF66] transition-colors cursor-pointer select-none">Compliance Logs</span>
             <span>•</span>
-            <span className="hover:text-[#00FF66] transition-colors cursor-pointer select-none">Vercel Edge Gateway</span>
+            <span className="hover:text-[#007A3E] dark:hover:text-[#00FF66] transition-colors cursor-pointer select-none">Vercel Edge Gateway</span>
           </div>
         </footer>
       </div>
@@ -1283,28 +1304,28 @@ export default function App() {
         <div className="fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-6 z-50 transition-all">
           <div 
             id="confidential-modal-content"
-            className="bg-[#070708] border border-steel rounded-xl w-full max-w-lg shadow-2xl relative overflow-hidden"
+            className={`border rounded-xl w-full max-w-lg shadow-2xl relative overflow-hidden transition-all duration-300 ${modalBg}`}
           >
             <div className="h-1 bg-red-500" />
             
             {/* Modal Header */}
-            <div className="p-4 border-b border-steel flex items-center justify-between bg-[#0b0b0d]">
+            <div className={`p-4 border-b flex items-center justify-between transition-colors duration-300 ${modalHeaderBg}`}>
               <div className="flex items-center space-x-2.5">
                 <Shield className="w-4 h-4 text-red-500" />
-                <span className="text-xs font-bold text-white font-mono uppercase tracking-wide">
+                <span className={`text-xs font-bold font-mono uppercase tracking-wide transition-colors duration-300 ${modalTitle}`}>
                   Confidentiality Protocol
                 </span>
               </div>
               <button
                 onClick={() => setIsConfidentialOpen(false)}
-                className="p-1 rounded bg-black/40 border border-steel hover:border-red-500/50 hover:bg-red-950/20 text-neutral-400 hover:text-red-400 transition-all cursor-pointer"
+                className={`p-1 rounded border transition-all cursor-pointer ${modalCloseBtn}`}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-5 font-sans text-xs md:text-sm text-neutral-300 leading-relaxed space-y-4">
+            <div className="p-5 font-sans text-xs md:text-sm leading-relaxed space-y-4">
               <p>
                 This project was developed as part of my professional work at <strong>Blink Digital</strong>. Due to company confidentiality and intellectual property policies, the source code and live production environment cannot be shared publicly.
               </p>
@@ -1317,7 +1338,7 @@ export default function App() {
             </div>
 
             {/* Modal Footer */}
-            <div className="bg-[#0b0b0d] border-t border-steel p-4 flex justify-end">
+            <div className={`border-t p-4 flex justify-end transition-colors duration-300 ${modalHeaderBg}`}>
               <button 
                 onClick={() => setIsConfidentialOpen(false)}
                 className={`px-4 py-1.5 rounded text-xs font-mono font-bold cursor-pointer ${primaryBtnClass}`}
@@ -1334,28 +1355,28 @@ export default function App() {
         <div className="fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-6 z-50 transition-all">
           <div 
             id="adtech-preview-modal-content"
-            className="bg-[#070708] border border-steel rounded-xl w-full max-w-lg shadow-2xl relative overflow-hidden"
+            className={`border rounded-xl w-full max-w-lg shadow-2xl relative overflow-hidden transition-all duration-300 ${modalBg}`}
           >
-            <div className="h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent" />
+            <div className={`h-1 bg-gradient-to-r from-transparent via-${theme === 'dark' ? '[#00FF66]' : '[#007A3E]'} to-transparent`} />
             
             {/* Modal Header */}
-            <div className="p-4 border-b border-steel flex items-center justify-between bg-[#0b0b0d]">
+            <div className={`p-4 border-b flex items-center justify-between transition-colors duration-300 ${modalHeaderBg}`}>
               <div className="flex items-center space-x-2.5">
                 <Globe className={`w-4 h-4 ${accentText}`} />
-                <span className="text-xs font-bold text-white font-mono uppercase tracking-wide">
+                <span className={`text-xs font-bold font-mono uppercase tracking-wide transition-colors duration-300 ${modalTitle}`}>
                   AdTech Suite Preview
                 </span>
               </div>
               <button
                 onClick={() => setIsPreviewModalOpen(false)}
-                className="p-1 rounded bg-black/40 border border-steel hover:border-red-500/50 hover:bg-red-950/20 text-neutral-400 hover:text-red-400 transition-all cursor-pointer"
+                className={`p-1 rounded border transition-all cursor-pointer ${modalCloseBtn}`}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-5 font-sans text-xs md:text-sm text-neutral-300 leading-relaxed space-y-4">
+            <div className="p-5 font-sans text-xs md:text-sm leading-relaxed space-y-4">
               <p>
                 This platform was developed during my role as an AI Automation Engineer at <strong>Blink Digital India Pvt Ltd</strong>. It automates enterprise campaign operations by integrating campaign management, AI-powered creative generation, media synchronization, and production cloud infrastructure.
               </p>
@@ -1365,7 +1386,7 @@ export default function App() {
             </div>
 
             {/* Modal Footer */}
-            <div className="bg-[#0b0b0d] border-t border-steel p-4 flex justify-end">
+            <div className={`border-t p-4 flex justify-end transition-colors duration-300 ${modalHeaderBg}`}>
               <button 
                 onClick={() => setIsPreviewModalOpen(false)}
                 className={`px-4 py-1.5 rounded text-xs font-mono font-bold cursor-pointer ${primaryBtnClass}`}
@@ -1382,19 +1403,19 @@ export default function App() {
         <div className="fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-6 z-50 transition-all">
           <div 
             id="resume-modal-content"
-            className="bg-[#070708] border border-steel rounded-xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl relative overflow-hidden"
+            className={`border rounded-xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl relative overflow-hidden transition-all duration-300 ${modalBg}`}
           >
-            <div className="h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent" />
+            <div className={`h-1 bg-gradient-to-r from-transparent via-${theme === 'dark' ? '[#00FF66]' : '[#007A3E]'} to-transparent`} />
             
             {/* Modal Header */}
-            <div className="p-5 border-b border-steel flex items-center justify-between bg-[#0b0b0d]">
+            <div className={`p-5 border-b flex items-center justify-between transition-colors duration-300 ${modalHeaderBg}`}>
               <div className="flex items-center space-x-3">
-                <FileText className="w-5 h-5 text-[#00FF66]" />
+                <FileText className={`w-5 h-5 ${theme === 'dark' ? 'text-[#00FF66]' : 'text-[#007A3E]'}`} />
                 <div>
-                  <h3 className="text-sm font-bold text-white tracking-wide">
+                  <h3 className={`text-sm font-bold tracking-wide transition-colors duration-300 ${modalTitle}`}>
                     Mohammad_Roshan_Ali_CV.txt
                   </h3>
-                  <p className="text-[10px] font-mono text-neutral-500">
+                  <p className={`text-[10px] font-mono transition-colors duration-300 ${theme === 'dark' ? 'text-neutral-500' : 'text-zinc-500'}`}>
                     Size: 4.8 KB | Format: UTF-8 Monospace Standard
                   </p>
                 </div>
@@ -1404,13 +1425,13 @@ export default function App() {
                 <button
                   id="btn-copy-resume"
                   onClick={copyResumeText}
-                  className="p-2 rounded bg-black/40 border border-steel hover:border-[#00FF66]/30 text-neutral-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-xs font-mono"
+                  className={`p-2 rounded border transition-all cursor-pointer flex items-center gap-1.5 text-xs font-mono ${theme === 'dark' ? 'bg-black/40 border-[#121214] hover:border-[#00FF66]/30 text-neutral-400 hover:text-white' : 'bg-zinc-100 border-zinc-200 hover:border-[#007A3E]/30 text-zinc-650 hover:text-zinc-950'}`}
                   title="Copy CV contents to Clipboard"
                 >
                   {copiedText ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-[#00FF66]" />
-                      <span className="text-[#00FF66]">Copied</span>
+                      <Check className={`w-3.5 h-3.5 ${theme === 'dark' ? 'text-[#00FF66]' : 'text-[#007A3E]'}`} />
+                      <span className={theme === 'dark' ? 'text-[#00FF66]' : 'text-[#007A3E]'}>Copied</span>
                     </>
                   ) : (
                     <>
@@ -1422,7 +1443,7 @@ export default function App() {
                 <button
                   id="btn-download-resume"
                   onClick={downloadResume}
-                  className="p-2 rounded bg-black/40 border border-steel hover:border-[#00FF66]/30 text-neutral-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-xs font-mono"
+                  className={`p-2 rounded border transition-all cursor-pointer flex items-center gap-1.5 text-xs font-mono ${theme === 'dark' ? 'bg-black/40 border-[#121214] hover:border-[#00FF66]/30 text-neutral-400 hover:text-white' : 'bg-zinc-100 border-zinc-200 hover:border-[#007A3E]/30 text-zinc-650 hover:text-zinc-950'}`}
                   title="Download raw CV text file"
                 >
                   <Download className="w-3.5 h-3.5" />
@@ -1431,7 +1452,7 @@ export default function App() {
                 <button
                   id="btn-close-resume"
                   onClick={() => setIsResumeOpen(false)}
-                  className="p-2 rounded bg-black/40 border border-steel hover:border-red-500/50 hover:bg-red-950/20 text-neutral-400 hover:text-red-400 transition-all cursor-pointer"
+                  className={`p-2 rounded border transition-all cursor-pointer ${modalCloseBtn}`}
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1439,21 +1460,21 @@ export default function App() {
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 md:p-8 overflow-y-auto flex-grow bg-black/60 font-mono text-xs md:text-sm text-neutral-300 leading-relaxed scrollbar-thin scrollbar-thumb-steel/60 select-text">
-              <pre className="whitespace-pre-wrap font-mono text-white font-semibold">
+            <div className={`p-6 md:p-8 overflow-y-auto flex-grow font-mono text-xs md:text-sm leading-relaxed scrollbar-thin select-text transition-colors duration-300 ${theme === 'dark' ? 'bg-black/60 text-neutral-300 scrollbar-thumb-steel/60' : 'bg-zinc-50/50 text-zinc-700 scrollbar-thumb-zinc-300'}`}>
+              <pre className={`whitespace-pre-wrap font-mono font-semibold transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-zinc-900'}`}>
                 {fullResumeMarkdown}
               </pre>
             </div>
 
             {/* Modal Footer */}
-            <div className="bg-[#0b0b0d] border-t border-steel p-4 flex items-center justify-between text-[10px] font-mono text-neutral-500">
+            <div className={`border-t p-4 flex items-center justify-between text-[10px] font-mono transition-colors duration-300 ${modalHeaderBg}`}>
               <span className="flex items-center gap-1">
-                <CheckSquare className="w-3.5 h-3.5 text-[#00FF66]" /> Academic Waiver &amp; German Bachelor Equivalence Verified
+                <CheckSquare className={`w-3.5 h-3.5 ${theme === 'dark' ? 'text-[#00FF66]' : 'text-[#007A3E]'}`} /> Academic Waiver &amp; German Bachelor Equivalence Verified
               </span>
               <button 
                 id="btn-close-resume-bottom"
                 onClick={() => setIsResumeOpen(false)}
-                className="text-[#00FF66] hover:underline cursor-pointer"
+                className={`hover:underline cursor-pointer ${theme === 'dark' ? 'text-[#00FF66]' : 'text-[#007A3E]'}`}
               >
                 Close Viewer
               </button>

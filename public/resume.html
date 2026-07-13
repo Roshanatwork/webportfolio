@@ -7,13 +7,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.className = savedTheme;
+      }
+    })();
+  </script>
   <style>
     :root {
       --bg: #FFFFFF;
       --text: #1F2937;
       --text-muted: #4B5563;
-      --accent: #00B34A;
-      --accent-bg: rgba(0, 179, 74, 0.05);
+      --accent: #007A3E;
+      --accent-bg: rgba(0, 122, 62, 0.05);
       --border: #E5E7EB;
     }
 
@@ -26,6 +34,24 @@
         --accent-bg: rgba(0, 255, 102, 0.05);
         --border: #1F2937;
       }
+    }
+
+    html.dark {
+      --bg: #070708;
+      --text: #E5E7EB;
+      --text-muted: #9CA3AF;
+      --accent: #00FF66;
+      --accent-bg: rgba(0, 255, 102, 0.05);
+      --border: #1F2937;
+    }
+
+    html.light {
+      --bg: #FFFFFF;
+      --text: #1F2937;
+      --text-muted: #4B5563;
+      --accent: #007A3E;
+      --accent-bg: rgba(0, 122, 62, 0.05);
+      --border: #E5E7EB;
     }
 
     * {
