@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --color-obsidian: #070708;
+  --color-steel: #121214;
+  --color-neon-green: #00FF66;
+  --font-sans: 'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+}
+
+@utility animate-pulse-fast {
+  animation: blink 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.9); }
+}
+
+@utility shadow-neon-glow {
+  box-shadow: 0 0 20px -5px rgba(0, 255, 102, 0.15);
+}
+
+@utility border-glow-hover {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  &:hover {
+    border-color: rgba(0, 255, 102, 0.2);
+    box-shadow: 0 0 25px -5px rgba(0, 255, 102, 0.08);
+  }
+}
+
+/* Custom grid patterns or backgrounds typical of Vercel/Linear (Dark Mode) */
+@utility bg-grid-pattern {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Custom grid pattern for corporate Light Mode */
+@utility bg-grid-pattern-light {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+body {
+  overflow-x: hidden;
+}
